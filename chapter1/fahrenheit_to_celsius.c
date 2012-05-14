@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+float fahr_to_celsius(float fahrenheit);
+
 /* print Fahrenheit-Celsius table
     for fahr = 0, 20, ..., 300 */
 main()
@@ -17,9 +19,13 @@ main()
 
     fahr = lower;
     while (fahr <= upper) {
-        celsius = (5.0/9.0) * (fahr-32.0);
+        celsius = fahr_to_celsius(fahr);
         printf("%3.0f %6.1f\n", fahr, celsius);
         fahr = fahr + step;
     }
 }
 
+float fahr_to_celsius(float fahr)
+{
+    return (5.0/9.0) * (fahr-32.0);
+}
