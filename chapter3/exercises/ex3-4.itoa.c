@@ -31,7 +31,7 @@ main()
 /* convert n to characters in s, handle maximum negative value for ints */
 void itoa(int n, char s[])
 {
-    int i, sign, negative;
+    int i, sign;
 
     sign = (n < 0) ? -1 : 1;
     i = 0;
