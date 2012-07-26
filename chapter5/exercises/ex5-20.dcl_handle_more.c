@@ -33,7 +33,7 @@ main() /* convert declaration to words */
             }
             strcpy(constant, " constant");
         }
-        tokentype = prevtokentype = 0;
+        tokentype = prevtokentype = -1;
         strcpy(datatype, token);    /* is the datatype */
         out[0] = '\0';
         dcl();      /* parse rest of line */
@@ -72,8 +72,6 @@ void dirdcl(void)
 {
     int type;
 
-    printf("huzzah: %c\n", tokentype);
-    printf("doh:    %c\n", prevtokentype);
     if (tokentype == '(') { /* ( dcl ) */
         if (prevtokentype == NAME || prevtokentype == PARENS) {
             funcdcl();
@@ -107,6 +105,7 @@ void funcdcl(void)
 {
     int type;
     char arglist[MAXTOKEN];
+    arglist[0] = '\0';
 
     gettoken();
     while (tokentype != ')') {
@@ -119,11 +118,16 @@ void funcdcl(void)
             return;
         }
         strcat(arglist, token);
+        strcat(arglist, ", ");
         if (gettoken() != ',' && tokentype != ')') {
             printf("syntax error: function argument list must be separated with commas and be closed with ')'");
             return;
         }
+        if (tokentype == ',') {
+            gettoken();
+        }
     }
+    arglist[ strlen(arglist)-2 ] = '\0';
     strcat(out, " function with arg signature (");
     strcat(out, arglist);
     strcat(out, ") returning");
