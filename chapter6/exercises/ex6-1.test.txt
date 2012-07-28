@@ -1,0 +1,9 @@
+dont_count_this_int
+"dont count this float"
+'dont count this char'
+/* dont count this void 
+    or this
+        volatile
+    */
+// dont count this struct
+#if shouldnt be counted
