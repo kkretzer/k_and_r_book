@@ -11,10 +11,10 @@ struct wnode {          /* word tree: */
     struct wnode *right;    /* right child */
 };
 
-struct wnode *setwnode(struct wnode *);
 int getword(char *, int);
 struct wnode *addwordtree(struct wnode *, char *);
 struct wnode *addsorttree(struct wnode *, struct wnode *);
+void setwnode(struct wnode **, struct wnode *);
 struct wnode *walloc(void);
 void wordtreeprint(struct wnode *);
 char *mystrdup(char *);
@@ -34,20 +34,9 @@ main()
             rootword = addwordtree(rootword, word);
         }
     }
-    rootdesc = setwnode(rootword);
-    addsorttree(rootdesc, rootword->left);
-    addsorttree(rootdesc, rootword->right);
+    setwnode(&rootdesc, rootword);
     wordtreeprint(rootdesc);
     return 0;
-}
-
-struct wnode *setwnode(struct wnode *w)
-{
-    struct wnode *copynode = walloc();
-    copynode->word = mystrdup(w->word);
-    copynode->count = w->count;
-    copynode->left = copynode->right = NULL;
-    return copynode;
 }
 
 struct wnode *addwordtree(struct wnode *p, char *w)
@@ -78,9 +67,7 @@ struct wnode *addsorttree(struct wnode *p, struct wnode *w)
 
     if (w != NULL) {
         if (p == NULL) {
-            p = setwnode(w);
-            addsorttree(rootdesc, w->left);
-            addsorttree(rootdesc, w->right);
+            setwnode(&p, w);
         } else {
             if (w->count >= p->count) {
                 p->left = addsorttree(p->left, w);
@@ -90,6 +77,18 @@ struct wnode *addsorttree(struct wnode *p, struct wnode *w)
         }
     }
     return p;
+}
+
+void setwnode(struct wnode **p, struct wnode *w)
+{
+    struct wnode *wtemp;
+    (*p) = w;
+    wtemp = w->left;
+    w->left = NULL;
+    addsorttree(rootdesc, wtemp);
+    wtemp = w->right;
+    w->right = NULL;
+    addsorttree(rootdesc, wtemp);
 }
 
 /* wordtreeprint:  in-order print of word tree p */
