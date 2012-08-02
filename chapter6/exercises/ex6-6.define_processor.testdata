@@ -1,0 +1,7 @@
+#define foo 73
+#define bar 22*47
+
+int i, j;
+i = foo;
+j = bar;
+char *foobar;
